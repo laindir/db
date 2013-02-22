@@ -49,11 +49,11 @@ Written by Carl D Hamann (laindir).
 
 ##BUGS
 
-May continue to do things it shouldn't after an error
-A case could probably be made to use a BTREE instead of a HASH
-Shouldn't print anything to stdout when key not found, but does
-Should allow error messages to be suppressed
-Should give a useful exit code
+* May continue to do things it shouldn't after an error
+* A case could probably be made to use a BTREE instead of a HASH
+* Shouldn't print anything to stdout when key not found, but does
+* Should allow error messages to be suppressed
+* Should give a useful exit code
 
 ##COPYRIGHT
 
