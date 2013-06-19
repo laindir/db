@@ -1,0 +1,8 @@
+_db ()
+{
+	COMPREPLY=()
+	COMPREPLY=( $(compgen -W "$(db -k)" -- "${COMP_WORDS[COMP_CWORD]}") )
+	return 0
+}
+
+complete -F _db db
