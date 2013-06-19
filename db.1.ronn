@@ -1,0 +1,66 @@
+#db - command line key value store
+
+##SYNOPSIS
+
+`db` [`-f` _file_] _key_ [_value_]
+
+`db` [`-f` _file_] `-k`
+
+`db` [`-f` _file_] `-d` _key_
+
+##DESCRIPTION
+
+Insert and retrieve strings from a Berkeley DB on the command line.
+If _value_ is specified, it is stored in the database at _key_;
+otherwise, the value already stored at _key_ is printed to stdout.
+In the alternate forms, all keys can be dumped to stdout, or a given
+record can be deleted.
+
+##OPTIONS
+
+* `-f` _file_:
+Use _file_ instead of the default database.
+
+* `-k`:
+Dump all keys to stdout.
+
+* `-d`:
+Delete _key_ from the database instead of retrieving its value.
+
+##ENVIRONMENT
+
+* `HOME`:
+If a database file is not specified, and the default database
+file is not found in the current directory, the user's login directory
+is searched
+
+##FILES
+* _.db_:
+Default database file
+
+* _~/.db_:
+Fallback default database file
+
+##AUTHOR
+
+Written by Carl D Hamann (laindir).
+
+##BUGS
+
+May continue to do things it shouldn't after an error
+
+A case could probably be made to use a BTREE instead of a HASH
+
+Shouldn't print anything to stdout when key not found, but does
+
+Should allow error messages to be suppressed
+
+Should give a useful exit code
+
+##COPYRIGHT
+
+Copyright 2013 Carl D Hamann
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
