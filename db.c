@@ -28,8 +28,15 @@ along with db.  If not, see <http://www.gnu.org/licenses/>.
 #include <errno.h>
 #include <db.h>
 
+/** TODO
+add flag to append to a particular key
+add arg to delete a particular entry
+*/
 static const char *options = "kdf:";
 static const char *default_filename = ".db";
+/** TODO
+pull out usage message
+*/
 
 int
 db_try(const char *trace, int code)
@@ -170,14 +177,23 @@ main(int argc, char *argv[])
 	}
 	else if(dumpkeys == 0 && delete == 1 && keystring != NULL)
 	{
+/** TODO
+add cursor to handle deleting specific entry when multiple
+*/
 		db_try("delete", db->del(db, NULL, &key, 0));
 	}
 	else if(dumpkeys == 0 && delete == 0 && keystring != NULL && valstring != NULL)
 	{
+/** TODO
+change DB_NOOVERWRITE so we can handle multiple keys
+*/
 		db_try("put", db->put(db, NULL, &key, &value, DB_NOOVERWRITE));
 	}
 	else if(dumpkeys == 0 && delete == 0 && keystring != NULL && valstring == NULL)
 	{
+/** TODO
+add cursor to handle multiple entries
+*/
 		db_try("get", db->get(db, NULL, &key, &retval, 0));
 		fprintf(stdout, "%s\n", (char *)retval.data);
 	}
