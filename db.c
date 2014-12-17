@@ -28,11 +28,7 @@ along with db.  If not, see <http://www.gnu.org/licenses/>.
 #include <errno.h>
 #include <db.h>
 
-/** TODO
-add flag to append to a particular key
-add arg to delete a particular entry
-*/
-static const char *options = "kdf:";
+static const char *options = "adf:k";
 static const char *default_filename = ".db";
 /** TODO
 pull out usage message
@@ -112,6 +108,7 @@ main(int argc, char *argv[])
 	int ret = -1;
 	int dumpkeys = 0;
 	int delete = 0;
+	int append = 0;
 	const char *dbfile = NULL;
 	char *buildstring = NULL;
 	char *keystring = NULL;
@@ -127,14 +124,17 @@ main(int argc, char *argv[])
 	{
 		switch(ret)
 		{
-		case 'k':
-			dumpkeys = 1;
+		case 'a':
+			append = 1;
 			break;
 		case 'd':
 			delete = 1;
 			break;
 		case 'f':
 			dbfile = optarg;
+			break;
+		case 'k':
+			dumpkeys = 1;
 			break;
 		}
 
@@ -177,23 +177,27 @@ main(int argc, char *argv[])
 	}
 	else if(dumpkeys == 0 && delete == 1 && keystring != NULL)
 	{
-/** TODO
-add cursor to handle deleting specific entry when multiple
-*/
 		db_try("delete", db->del(db, NULL, &key, 0));
 	}
-	else if(dumpkeys == 0 && delete == 0 && keystring != NULL && valstring != NULL)
+	else if(dumpkeys == 0 && delete == 0 && keystring != NULL && valstring != NULL && append == 0)
 	{
-/** TODO
-change DB_NOOVERWRITE so we can handle multiple keys
-*/
 		db_try("put", db->put(db, NULL, &key, &value, DB_NOOVERWRITE));
+	}
+	else if(dumpkeys == 0 && delete == 0 && keystring != NULL && valstring != NULL && append == 1)
+	{
+		char *temp;
+		db_try("get", db->get(db, NULL, &key, &retval, 0));
+		try("malloc", (temp = malloc(retval.size + value.size)) == NULL);
+		strcpy(temp, (char *)retval.data);
+		temp[retval.size - 1] = '\n';
+		strcpy(temp + retval.size, (char *)value.data);
+		value.size += retval.size;
+		value.data = temp;
+		db_try("put", db->put(db, NULL, &key, &value, 0));
+		free(temp);
 	}
 	else if(dumpkeys == 0 && delete == 0 && keystring != NULL && valstring == NULL)
 	{
-/** TODO
-add cursor to handle multiple entries
-*/
 		db_try("get", db->get(db, NULL, &key, &retval, 0));
 		fprintf(stdout, "%s\n", (char *)retval.data);
 	}
